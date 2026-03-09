@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>PALO FORE GolfLink - Demo</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#1A3A8F;--primary-light:#E8F0FF;--primary-dark:#0E2563;--accent:#E84D2E;--gold:#D4A853;--dark:#1A1A2E;--gray:#6B7280;--light:#F9FAFB;--white:#FFFFFF;--radius:12px;--shadow:0 1px 3px rgba(0,0,0,.08),0 4px 12px rgba(0,0,0,.04)}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:var(--dark);background:var(--light);overflow-x:hidden;padding-bottom:80px}
+a{text-decoration:none;color:inherit}
+
+/* Header */
+.header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,0,0,.06);padding:0 16px;height:56px;display:flex;align-items:center;justify-content:space-between}
+.header-logo{display:flex;align-items:center;gap:10px}
+.header-logo img{width:36px;height:36px}
+.header-logo span{font-weight:700;font-size:18px;color:var(--primary)}
+.header-right{display:flex;align-items:center;gap:12px}
+.header-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--primary-light);color:var(--primary);font-size:16px;position:relative}
+.badge-dot{position:absolute;top:2px;right:2px;width:8px;height:8px;background:#EF4444;border-radius:50%;border:2px solid white}
+
+/* Navigation tabs */
+.nav-tabs{display:flex;overflow-x:auto;gap:6px;padding:12px 16px;scrollbar-width:none;-ms-overflow-style:none}
+.nav-tabs::-webkit-scrollbar{display:none}
+.nav-tab{flex-shrink:0;padding:8px 16px;border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;transition:.2s;border:1px solid #E5E7EB;background:white;color:var(--gray)}
+.nav-tab.active{background:var(--primary);color:white;border-color:var(--primary)}
+.nav-tab:hover{border-color:var(--primary)}
+
+/* Screen container */
+.screen{display:none}
+.screen.active{display:block}
+
+/* Hero */
+.hero{background:linear-gradient(135deg,#0E2563 0%,#1A3A8F 50%,#E84D2E 100%);color:white;padding:40px 20px 48px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-50%;right:-50%;width:100%;height:100%;background:radial-gradient(circle,rgba(255,255,255,.05) 0%,transparent 70%);pointer-events:none}
+.hero-logo{width:80px;height:80px;margin:0 auto 16px;animation:float 3s ease-in-out infinite}
+.hero h1{font-size:28px;font-weight:800;margin-bottom:6px;letter-spacing:-.5px}
+.hero .tagline{font-size:14px;opacity:.85;margin-bottom:24px}
+.hero-stats{display:flex;justify-content:center;gap:32px;margin-top:20px}
+.hero-stat{text-align:center}
+.hero-stat .num{font-size:24px;font-weight:800;color:var(--gold)}
+.hero-stat .label{font-size:11px;opacity:.7;margin-top:2px}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+
+/* Section */
+.section{padding:24px 16px}
+.section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.section-title{font-size:18px;font-weight:700;color:var(--dark)}
+.see-all{font-size:13px;color:var(--primary);font-weight:600}
+
+/* Quick Actions */
+.quick-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:0 16px 8px}
+.quick-action{display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 8px;background:white;border-radius:var(--radius);box-shadow:var(--shadow);cursor:pointer;transition:.2s}
+.quick-action:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.qa-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px}
+.qa-label{font-size:11px;font-weight:600;color:var(--dark);text-align:center}
+
+/* Horizontal scroll cards */
+.h-scroll{display:flex;overflow-x:auto;gap:14px;padding:0 16px 8px;scroll-snap-type:x mandatory;scrollbar-width:none}
+.h-scroll::-webkit-scrollbar{display:none}
+
+/* Club Card */
+.club-card{flex-shrink:0;width:280px;border-radius:var(--radius);overflow:hidden;background:white;box-shadow:var(--shadow);scroll-snap-align:start;transition:.2s}
+.club-card:hover{transform:translateY(-2px)}
+.club-img{height:140px;position:relative;overflow:hidden}
+.club-img-bg{width:100%;height:100%;object-fit:cover}
+.club-tier{position:absolute;top:10px;left:10px;padding:4px 10px;border-radius:12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.tier-exclusive{background:linear-gradient(135deg,var(--gold),#B8860B);color:white}
+.tier-premium{background:linear-gradient(135deg,#6366F1,#4F46E5);color:white}
+.tier-standard{background:var(--primary);color:white}
+.club-info{padding:14px}
+.club-name{font-size:14px;font-weight:700;margin-bottom:4px}
+.club-location{font-size:12px;color:var(--gray);display:flex;align-items:center;gap:4px;margin-bottom:8px}
+.club-meta{display:flex;justify-content:space-between;align-items:center}
+.club-rating{display:flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:var(--gold)}
+.club-price{font-size:13px;font-weight:700;color:var(--primary)}
+
+/* Coach Card */
+.coach-card{flex-shrink:0;width:200px;border-radius:var(--radius);overflow:hidden;background:white;box-shadow:var(--shadow);scroll-snap-align:start;text-align:center;padding:20px 14px;transition:.2s}
+.coach-card:hover{transform:translateY(-2px)}
+.coach-avatar{width:72px;height:72px;border-radius:50%;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;color:white;background:linear-gradient(135deg,var(--primary),var(--accent))}
+.coach-name{font-size:14px;font-weight:700;margin-bottom:2px}
+.coach-spec{font-size:11px;color:var(--gray);margin-bottom:8px}
+.coach-rating{font-size:12px;color:var(--gold);margin-bottom:4px}
+.coach-price{font-size:13px;font-weight:700;color:var(--primary)}
+
+/* Product Card */
+.product-card{flex-shrink:0;width:160px;border-radius:var(--radius);overflow:hidden;background:white;box-shadow:var(--shadow);scroll-snap-align:start;transition:.2s}
+.product-card:hover{transform:translateY(-2px)}
+.product-img{height:140px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:40px}
+.product-info{padding:12px}
+.product-cat{font-size:10px;color:var(--primary);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.product-name{font-size:13px;font-weight:600;margin-bottom:6px;line-height:1.3}
+.product-price{font-size:14px;font-weight:700;color:var(--primary)}
+
+/* Day Pass page */
+.daypass-card{background:white;border-radius:var(--radius);box-shadow:var(--shadow);margin:0 16px 14px;overflow:hidden}
+.daypass-header{display:flex;gap:14px;padding:16px}
+.daypass-thumb{width:90px;height:90px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:32px}
+.daypass-details{flex:1;min-width:0}
+.daypass-club{font-size:15px;font-weight:700;margin-bottom:2px}
+.daypass-loc{font-size:12px;color:var(--gray);margin-bottom:6px}
+.daypass-tags{display:flex;flex-wrap:wrap;gap:4px}
+.daypass-tag{padding:3px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--primary-light);color:var(--primary)}
+.daypass-footer{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-top:1px solid #F3F4F6;background:#FAFAFA}
+.daypass-price{font-size:16px;font-weight:700;color:var(--primary)}
+.daypass-btn{padding:8px 18px;border-radius:8px;background:var(--primary);color:white;font-size:13px;font-weight:600;border:none;cursor:pointer}
+
+/* Admin Dashboard */
+.admin-metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:0 16px 16px}
+.metric-card{background:white;border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
+.metric-label{font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.metric-value{font-size:22px;font-weight:800;color:var(--dark)}
+.metric-change{font-size:11px;margin-top:4px;font-weight:600}
+.metric-up{color:#10B981}
+.metric-down{color:#EF4444}
+
+.admin-table{margin:0 16px 16px;background:white;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.admin-table-header{padding:14px 16px;font-size:15px;font-weight:700;border-bottom:1px solid #F3F4F6}
+.admin-row{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid #F9FAFB}
+.admin-row:last-child{border-bottom:none}
+.admin-row-left{flex:1}
+.admin-row-name{font-size:13px;font-weight:600}
+.admin-row-sub{font-size:11px;color:var(--gray)}
+.status-badge{padding:3px 10px;border-radius:10px;font-size:10px;font-weight:700;text-transform:uppercase}
+.status-reserved{background:#FEF3C7;color:#92400E}
+.status-checked{background:#D1FAE5;color:#065F46}
+.status-pending{background:#FEE2E2;color:#991B1B}
+.status-completed{background:#E0E7FF;color:#3730A3}
+
+/* How it works */
+.how-it-works{padding:24px 16px;background:white}
+.hiw-step{display:flex;gap:14px;margin-bottom:20px;align-items:flex-start}
+.hiw-num{width:36px;height:36px;border-radius:50%;background:var(--primary);color:white;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;flex-shrink:0}
+.hiw-text h3{font-size:14px;font-weight:700;margin-bottom:2px}
+.hiw-text p{font-size:12px;color:var(--gray);line-height:1.5}
+
+/* CTA Banner */
+.cta-banner{margin:16px;padding:24px;border-radius:var(--radius);background:linear-gradient(135deg,var(--primary),var(--accent));color:white;text-align:center}
+.cta-banner h3{font-size:18px;font-weight:700;margin-bottom:6px}
+.cta-banner p{font-size:13px;opacity:.85;margin-bottom:16px}
+.cta-btn{display:inline-block;padding:10px 28px;border-radius:8px;background:white;color:var(--primary);font-weight:700;font-size:14px;border:none;cursor:pointer}
+
+/* Bottom Nav */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:72px;background:rgba(255,255,255,.96);backdrop-filter:blur(16px);border-top:1px solid rgba(0,0,0,.06);display:flex;align-items:center;justify-content:space-around;z-index:200;padding-bottom:env(safe-area-inset-bottom)}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:8px 12px;transition:.2s}
+.nav-item.active .nav-icon{color:var(--primary)}
+.nav-item.active .nav-label{color:var(--primary)}
+.nav-icon{font-size:20px;color:var(--gray);transition:.2s}
+.nav-label{font-size:10px;font-weight:600;color:var(--gray);transition:.2s}
+
+/* Search bar */
+.search-bar{margin:12px 16px;padding:10px 16px;border-radius:12px;border:1px solid #E5E7EB;background:white;font-size:14px;color:var(--gray);display:flex;align-items:center;gap:8px}
+
+/* Filter chips */
+.filter-chips{display:flex;gap:8px;padding:0 16px 12px;overflow-x:auto;scrollbar-width:none}
+.filter-chips::-webkit-scrollbar{display:none}
+.filter-chip{flex-shrink:0;padding:6px 14px;border-radius:16px;font-size:12px;font-weight:500;border:1px solid #E5E7EB;background:white;cursor:pointer;transition:.2s}
+.filter-chip.active{background:var(--primary);color:white;border-color:var(--primary)}
+
+/* Toast */
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--dark);color:white;padding:12px 24px;border-radius:12px;font-size:13px;font-weight:500;z-index:300;opacity:0;transition:.3s;box-shadow:0 4px 20px rgba(0,0,0,.2)}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+/* Animations */
+@keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.animate-in{animation:fadeInUp .4s ease-out}
+
+/* Desktop */
+@media(min-width:768px){
+  body{max-width:430px;margin:0 auto;box-shadow:-1px 0 0 #E5E7EB,1px 0 0 #E5E7EB;min-height:100vh}
+  .bottom-nav{max-width:430px;left:50%;transform:translateX(-50%)}
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-logo" onclick="switchScreen('home')" style="cursor:pointer">
+    <img id="headerLogo" alt="PALO FORE GolfLink">
+    <span>PALO FORE</span>
+  </div>
+  <div class="header-right">
+    <div class="header-icon" onclick="showToast('Notifications coming soon')">
+      🔔<div class="badge-dot"></div>
+    </div>
+    <div class="header-icon" onclick="showToast('Cart: 2 items')">🛒</div>
+    <div class="header-icon" onclick="switchScreen('admin')">👤</div>
+  </div>
+</div>
+
+<!-- ============ HOME SCREEN ============ -->
+<div class="screen active" id="screen-home">
+  <div class="hero">
+    <img id="heroLogo" class="hero-logo" alt="PALO FORE GolfLink">
+    <h1>PALO FORE GolfLink</h1>
+    <div class="tagline">GolfLink Marketplace — Philippines</div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="num" data-target="117">0</div><div class="label">Golf Courses</div></div>
+      <div class="hero-stat"><div class="num" data-target="85">0</div><div class="label">Pro Coaches</div></div>
+      <div class="hero-stat"><div class="num" data-target="1250">0</div><div class="label">Active Golfers</div></div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="section"><div class="section-header"><div class="section-title">Quick Actions</div></div></div>
+  <div class="quick-actions">
+    <div class="quick-action" onclick="switchScreen('daypass')"><div class="qa-icon" style="background:#ECFDF5">🎫</div><div class="qa-label">Day Pass</div></div>
+    <div class="quick-action" onclick="switchScreen('coaches')"><div class="qa-icon" style="background:#EFF6FF">🏌️</div><div class="qa-label">Find Coach</div></div>
+    <div class="quick-action" onclick="switchScreen('shop')"><div class="qa-icon" style="background:#FEF3C7">🛍️</div><div class="qa-label">Pro Shop</div></div>
+    <div class="quick-action" onclick="switchScreen('home')"><div class="qa-icon" style="background:#F3E8FF">⛳</div><div class="qa-label">Driving Range</div></div>
+    <div class="quick-action" onclick="switchScreen('home')"><div class="qa-icon" style="background:#FEE2E2">🏆</div><div class="qa-label">Events</div></div>
+    <div class="quick-action" onclick="switchScreen('home')"><div class="qa-icon" style="background:#E0E7FF">💬</div><div class="qa-label">Community</div></div>
+  </div>
+
+  <!-- Featured Clubs -->
+  <div class="section"><div class="section-header"><div class="section-title">Featured Clubs</div><span class="see-all" onclick="switchScreen('daypass')">See All →</span></div></div>
+  <div class="h-scroll">
+    <div class="club-card" onclick="showToast('Opening Manila Southwoods...')">
+      <div class="club-img" style="background:linear-gradient(135deg,#1a5c3f,#0a3d2a)">
+        <div style="color:white;font-size:48px;display:flex;align-items:center;justify-content:center;height:100%">⛳</div>
+        <div class="club-tier tier-exclusive">Exclusive</div>
+      </div>
+      <div class="club-info">
+        <div class="club-name">Manila Southwoods G&CC</div>
+        <div class="club-location">📍 Carmona, Cavite</div>
+        <div class="club-meta"><div class="club-rating">⭐ 4.9 (312)</div><div class="club-price">₱4,500</div></div>
+      </div>
+    </div>
+    <div class="club-card" onclick="showToast('Opening Riviera Golf...')">
+      <div class="club-img" style="background:linear-gradient(135deg,#2563eb,#1e40af)">
+        <div style="color:white;font-size:48px;display:flex;align-items:center;justify-content:center;height:100%">🏌️</div>
+        <div class="club-tier tier-premium">Premium</div>
+      </div>
+      <div class="club-info">
+        <div class="club-name">Riviera Golf & Country Club</div>
+        <div class="club-location">📍 Silang, Cavite</div>
+        <div class="club-meta"><div class="club-rating">⭐ 4.8 (287)</div><div class="club-price">₱3,800</div></div>
+      </div>
+    </div>
+    <div class="club-card" onclick="showToast('Opening Pradera Verde...')">
+      <div class="club-img" style="background:linear-gradient(135deg,#7c3aed,#5b21b6)">
+        <div style="color:white;font-size:48px;display:flex;align-items:center;justify-content:center;height:100%">🌿</div>
+        <div class="club-tier tier-premium">Premium</div>
+      </div>
+      <div class="club-info">
+        <div class="club-name">Pradera Verde Golf Club</div>
+        <div class="club-location">📍 Lubao, Pampanga</div>
+        <div class="club-meta"><div class="club-rating">⭐ 4.7 (198)</div><div class="club-price">₱2,800</div></div>
+      </div>
+    </div>
+    <div class="club-card">
+      <div class="club-img" style="background:linear-gradient(135deg,#059669,#047857)">
+        <div style="color:white;font-size:48px;display:flex;align-items:center;justify-content:center;height:100%">🌴</div>
+        <div class="club-tier tier-standard">Standard</div>
+      </div>
+      <div class="club-info">
+        <div class="club-name">Cebu Country Club</div>
+        <div class="club-location">📍 Cebu City, Cebu</div>
+        <div class="club-meta"><div class="club-rating">⭐ 4.6 (156)</div><div class="club-price">₱2,200</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top Coaches -->
+  <div class="section"><div class="section-header"><div class="section-title">Top Coaches</div><span class="see-all" onclick="switchScreen('coaches')">See All →</span></div></div>
+  <div class="h-scroll">
+    <div class="coach-card"><div class="coach-avatar">JR</div><div class="coach-name">Coach Jun Reyes</div><div class="coach-spec">Short Game Specialist</div><div class="coach-rating">⭐ 4.9 · 142 lessons</div><div class="coach-price">₱2,000/hr</div></div>
+    <div class="coach-card"><div class="coach-avatar">MC</div><div class="coach-name">Coach Maria Cruz</div><div class="coach-spec">Swing Analysis</div><div class="coach-rating">⭐ 4.8 · 98 lessons</div><div class="coach-price">₱1,800/hr</div></div>
+    <div class="coach-card"><div class="coach-avatar">AT</div><div class="coach-name">Coach Andre Tan</div><div class="coach-spec">Putting & Chipping</div><div class="coach-rating">⭐ 4.7 · 76 lessons</div><div class="coach-price">₱1,500/hr</div></div>
+    <div class="coach-card"><div class="coach-avatar" style="background:linear-gradient(135deg,var(--gold),#B8860B)">LS</div><div class="coach-name">Coach Lisa Santos</div><div class="coach-spec">Women's Golf</div><div class="coach-rating">⭐ 4.9 · 210 lessons</div><div class="coach-price">₱2,500/hr</div></div>
+  </div>
+
+  <!-- How It Works -->
+  <div class="how-it-works">
+    <div class="section-header"><div class="section-title">How It Works</div></div>
+    <div class="hiw-step"><div class="hiw-num">1</div><div class="hiw-text"><h3>Browse & Discover</h3><p>Find golf clubs, coaches, day passes, and equipment across the Philippines</p></div></div>
+    <div class="hiw-step"><div class="hiw-num">2</div><div class="hiw-text"><h3>Book & Pay</h3><p>Secure your spot instantly with GCash, Maya, or credit card via PayMongo</p></div></div>
+    <div class="hiw-step"><div class="hiw-num">3</div><div class="hiw-text"><h3>Play & Improve</h3><p>Show up, play, get coached, and track your golf journey</p></div></div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-banner">
+    <h3>Join PALO FORE GolfLink</h3>
+    <p>Connect with 85+ coaches and 117 courses across the Philippines</p>
+    <button class="cta-btn" onclick="showToast('Sign up flow would open')">Get Started Free</button>
+  </div>
+</div>
+
+<!-- ============ DAY PASS SCREEN ============ -->
+<div class="screen" id="screen-daypass">
+  <div class="search-bar" onclick="showToast('Search clubs...')">🔍 Search clubs, locations...</div>
+  <div class="filter-chips">
+    <div class="filter-chip active">All</div>
+    <div class="filter-chip">NCR</div>
+    <div class="filter-chip">Cavite</div>
+    <div class="filter-chip">Laguna</div>
+    <div class="filter-chip">Pampanga</div>
+    <div class="filter-chip">Cebu</div>
+    <div class="filter-chip">Davao</div>
+  </div>
+  <div class="section"><div class="section-header"><div class="section-title">Available Day Passes</div></div></div>
+
+  <div class="daypass-card animate-in">
+    <div class="daypass-header">
+      <div class="daypass-thumb" style="background:linear-gradient(135deg,#0D5C3F,#094A32);color:white">⛳</div>
+      <div class="daypass-details">
+        <div class="daypass-club">Manila Southwoods G&CC</div>
+        <div class="daypass-loc">📍 Carmona, Cavite · 45 min from Makati</div>
+        <div class="daypass-tags"><span class="daypass-tag">Exclusive</span><span class="daypass-tag">18 Holes</span><span class="daypass-tag">Cart Included</span></div>
+      </div>
+    </div>
+    <div class="daypass-footer"><div class="daypass-price">₱4,500 <span style="font-size:11px;color:var(--gray);font-weight:400">/ person</span></div><button class="daypass-btn" onclick="showToast('Booking flow: Select date → Time slot → Payment')">Book Now</button></div>
+  </div>
+
+  <div class="daypass-card animate-in">
+    <div class="daypass-header">
+      <div class="daypass-thumb" style="background:linear-gradient(135deg,#2563eb,#1e40af);color:white">🏌️</div>
+      <div class="daypass-details">
+        <div class="daypass-club">Riviera Golf & Country Club</div>
+        <div class="daypass-loc">📍 Silang, Cavite · 1 hr from Makati</div>
+        <div class="daypass-tags"><span class="daypass-tag">Premium</span><span class="daypass-tag">27 Holes</span><span class="daypass-tag">Caddy Included</span></div>
+      </div>
+    </div>
+    <div class="daypass-footer"><div class="daypass-price">₱3,800 <span style="font-size:11px;color:var(--gray);font-weight:400">/ person</span></div><button class="daypass-btn" onclick="showToast('Booking flow: Select date → Time slot → Payment')">Book Now</button></div>
+  </div>
+
+  <div class="daypass-card animate-in">
+    <div class="daypass-header">
+      <div class="daypass-thumb" style="background:linear-gradient(135deg,#7c3aed,#5b21b6);color:white">🌿</div>
+      <div class="daypass-details">
+        <div class="daypass-club">Pradera Verde Golf Club</div>
+        <div class="daypass-loc">📍 Lubao, Pampanga · Clark area</div>
+        <div class="daypass-tags"><span class="daypass-tag">Premium</span><span class="daypass-tag">18 Holes</span><span class="daypass-tag">DOT GolfEx</span></div>
+      </div>
+    </div>
+    <div class="daypass-footer"><div class="daypass-price">₱2,800 <span style="font-size:11px;color:var(--gray);font-weight:400">/ person</span></div><button class="daypass-btn" onclick="showToast('Booking flow: Select date → Time slot → Payment')">Book Now</button></div>
+  </div>
+
+  <div class="daypass-card animate-in">
+    <div class="daypass-header">
+      <div class="daypass-thumb" style="background:linear-gradient(135deg,#059669,#047857);color:white">🌴</div>
+      <div class="daypass-details">
+        <div class="daypass-club">Cebu Country Club</div>
+        <div class="daypass-loc">📍 Cebu City, Cebu</div>
+        <div class="daypass-tags"><span class="daypass-tag">Standard</span><span class="daypass-tag">18 Holes</span></div>
+      </div>
+    </div>
+    <div class="daypass-footer"><div class="daypass-price">₱2,200 <span style="font-size:11px;color:var(--gray);font-weight:400">/ person</span></div><button class="daypass-btn" onclick="showToast('Booking flow: Select date → Time slot → Payment')">Book Now</button></div>
+  </div>
+</div>
+
+<!-- ============ COACHES SCREEN ============ -->
+<div class="screen" id="screen-coaches">
+  <div class="search-bar">🔍 Search coaches, specializations...</div>
+  <div class="filter-chips">
+    <div class="filter-chip active">All</div>
+    <div class="filter-chip">Short Game</div>
+    <div class="filter-chip">Swing</div>
+    <div class="filter-chip">Putting</div>
+    <div class="filter-chip">Women's</div>
+    <div class="filter-chip">Junior</div>
+  </div>
+  <div class="section"><div class="section-title" style="padding:0 0 4px">85 Coaches Available</div></div>
+
+  <div style="padding:0 16px;display:flex;flex-direction:column;gap:12px">
+    <div style="background:white;border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;display:flex;gap:14px;align-items:center">
+      <div class="coach-avatar" style="width:56px;height:56px;font-size:18px;flex-shrink:0">JR</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:700;font-size:14px">Coach Jun Reyes</div>
+        <div style="font-size:12px;color:var(--gray)">Short Game Specialist · Manila</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px"><span style="font-size:12px;color:var(--gold)">⭐ 4.9 · 142 lessons</span><span style="font-size:14px;font-weight:700;color:var(--primary)">₱2,000/hr</span></div>
+      </div>
+    </div>
+    <div style="background:white;border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;display:flex;gap:14px;align-items:center">
+      <div class="coach-avatar" style="width:56px;height:56px;font-size:18px;flex-shrink:0">MC</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:700;font-size:14px">Coach Maria Cruz</div>
+        <div style="font-size:12px;color:var(--gray)">Swing Analysis · Cavite</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px"><span style="font-size:12px;color:var(--gold)">⭐ 4.8 · 98 lessons</span><span style="font-size:14px;font-weight:700;color:var(--primary)">₱1,800/hr</span></div>
+      </div>
+    </div>
+    <div style="background:white;border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;display:flex;gap:14px;align-items:center">
+      <div class="coach-avatar" style="width:56px;height:56px;font-size:18px;flex-shrink:0;background:linear-gradient(135deg,var(--gold),#B8860B)">LS</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:700;font-size:14px">Coach Lisa Santos</div>
+        <div style="font-size:12px;color:var(--gray)">Women's Golf · Makati</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px"><span style="font-size:12px;color:var(--gold)">⭐ 4.9 · 210 lessons</span><span style="font-size:14px;font-weight:700;color:var(--primary)">₱2,500/hr</span></div>
+      </div>
+    </div>
+    <div style="background:white;border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;display:flex;gap:14px;align-items:center">
+      <div class="coach-avatar" style="width:56px;height:56px;font-size:18px;flex-shrink:0">AT</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:700;font-size:14px">Coach Andre Tan</div>
+        <div style="font-size:12px;color:var(--gray)">Putting & Chipping · Clark</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px"><span style="font-size:12px;color:var(--gold)">⭐ 4.7 · 76 lessons</span><span style="font-size:14px;font-weight:700;color:var(--primary)">₱1,500/hr</span></div>
+      </div>
+    </div>
+    <div style="background:white;border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;display:flex;gap:14px;align-items:center">
+      <div class="coach-avatar" style="width:56px;height:56px;font-size:18px;flex-shrink:0;background:linear-gradient(135deg,#6366f1,#4f46e5)">RD</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:700;font-size:14px">Coach Rico Delgado</div>
+        <div style="font-size:12px;color:var(--gray)">Junior Golf · Laguna</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px"><span style="font-size:12px;color:var(--gold)">⭐ 4.8 · 134 lessons</span><span style="font-size:14px;font-weight:700;color:var(--primary)">₱1,200/hr</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SHOP SCREEN ============ -->
+<div class="screen" id="screen-shop">
+  <div class="search-bar">🔍 Search equipment, apparel...</div>
+  <div class="filter-chips">
+    <div class="filter-chip active">All</div>
+    <div class="filter-chip">Clubs</div>
+    <div class="filter-chip">Balls</div>
+    <div class="filter-chip">Apparel</div>
+    <div class="filter-chip">Accessories</div>
+    <div class="filter-chip">Bags</div>
+  </div>
+  <div class="section"><div class="section-title" style="padding:0 0 4px">Pro Shop</div></div>
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:0 16px">
+    <div class="product-card" onclick="showToast('Added to cart!')"><div class="product-img" style="background:#F0FDF4">🏌️</div><div class="product-info"><div class="product-cat">Clubs</div><div class="product-name">TaylorMade Stealth 2 Driver</div><div class="product-price">₱32,500</div></div></div>
+    <div class="product-card" onclick="showToast('Added to cart!')"><div class="product-img" style="background:#EFF6FF">⛳</div><div class="product-info"><div class="product-cat">Balls</div><div class="product-name">Titleist Pro V1 (Dozen)</div><div class="product-price">₱3,800</div></div></div>
+    <div class="product-card" onclick="showToast('Added to cart!')"><div class="product-img" style="background:#FEF3C7">👕</div><div class="product-info"><div class="product-cat">Apparel</div><div class="product-name">Under Armour Polo Shirt</div><div class="product-price">₱3,200</div></div></div>
+    <div class="product-card" onclick="showToast('Added to cart!')"><div class="product-img" style="background:#F3E8FF">🧤</div><div class="product-info"><div class="product-cat">Accessories</div><div class="product-name">FootJoy WeatherSof Glove</div><div class="product-price">₱1,100</div></div></div>
+    <div class="product-card" onclick="showToast('Added to cart!')"><div class="product-img" style="background:#FEE2E2">🎒</div><div class="product-info"><div class="product-cat">Bags</div><div class="product-name">Callaway Fairway C Stand Bag</div><div class="product-price">₱12,500</div></div></div>
+    <div class="product-card" onclick="showToast('Added to cart!')"><div class="product-img" style="background:#E0E7FF">🕶️</div><div class="product-info"><div class="product-cat">Accessories</div><div class="product-name">Oakley Radar EV Path</div><div class="product-price">₱9,800</div></div></div>
+  </div>
+</div>
+
+<!-- ============ ADMIN SCREEN ============ -->
+<div class="screen" id="screen-admin">
+  <div class="section" style="padding-bottom:8px"><div class="section-title">Club Admin Dashboard</div><div style="font-size:12px;color:var(--gray);margin-top:4px">Manila Southwoods G&CC · March 2026</div></div>
+
+  <div class="admin-metrics">
+    <div class="metric-card"><div class="metric-label">Revenue (MTD)</div><div class="metric-value">₱485K</div><div class="metric-change metric-up">↑ 12.3% vs last month</div></div>
+    <div class="metric-card"><div class="metric-label">Day Passes</div><div class="metric-value">47</div><div class="metric-change metric-up">↑ 8 more than Feb</div></div>
+    <div class="metric-card"><div class="metric-label">Pending Endorsements</div><div class="metric-value" style="color:#EF4444">5</div><div class="metric-change" style="color:var(--gray)">Needs review</div></div>
+    <div class="metric-card"><div class="metric-label">Avg Rating</div><div class="metric-value" style="color:var(--gold)">4.9</div><div class="metric-change metric-up">↑ 0.1 this month</div></div>
+  </div>
+
+  <div class="nav-tabs" style="padding-top:0">
+    <div class="nav-tab active" onclick="this.parentNode.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));this.classList.add('active')">Day Passes</div>
+    <div class="nav-tab" onclick="this.parentNode.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));this.classList.add('active')">Endorsements</div>
+    <div class="nav-tab" onclick="this.parentNode.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));this.classList.add('active')">Transfers</div>
+    <div class="nav-tab" onclick="this.parentNode.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));this.classList.add('active')">Revenue</div>
+  </div>
+
+  <div class="admin-table">
+    <div class="admin-table-header">Recent Day Passes</div>
+    <div class="admin-row"><div class="admin-row-left"><div class="admin-row-name">Juan Santos</div><div class="admin-row-sub">Mar 8 · Morning · 2 players</div></div><div class="status-badge status-reserved">Reserved</div></div>
+    <div class="admin-row"><div class="admin-row-left"><div class="admin-row-name">Maria Cruz</div><div class="admin-row-sub">Mar 8 · Afternoon · 1 player</div></div><div class="status-badge status-checked">Checked In</div></div>
+    <div class="admin-row"><div class="admin-row-left"><div class="admin-row-name">Carlos Lim</div><div class="admin-row-sub">Mar 9 · Morning · 4 players</div></div><div class="status-badge status-reserved">Reserved</div></div>
+    <div class="admin-row"><div class="admin-row-left"><div class="admin-row-name">Anna Reyes</div><div class="admin-row-sub">Mar 7 · Twilight · 1 player</div></div><div class="status-badge status-completed">Completed</div></div>
+  </div>
+
+  <div class="admin-table">
+    <div class="admin-table-header">Pending Endorsements</div>
+    <div class="admin-row"><div class="admin-row-left"><div class="admin-row-name">Pedro Reyes → Juan Santos</div><div class="admin-row-sub">Business associate · Expires Mar 10</div></div><div style="display:flex;gap:6px"><button style="padding:5px 12px;border-radius:6px;background:var(--primary);color:white;border:none;font-size:11px;font-weight:600;cursor:pointer" onclick="showToast('Endorsement approved!')">Approve</button><button style="padding:5px 12px;border-radius:6px;background:#FEE2E2;color:#991B1B;border:none;font-size:11px;font-weight:600;cursor:pointer" onclick="showToast('Endorsement declined')">Decline</button></div></div>
+    <div class="admin-row"><div class="admin-row-left"><div class="admin-row-name">Ana Torres → Carlos Lim</div><div class="admin-row-sub">Friend · Expires Mar 10</div></div><div style="display:flex;gap:6px"><button style="padding:5px 12px;border-radius:6px;background:var(--primary);color:white;border:none;font-size:11px;font-weight:600;cursor:pointer" onclick="showToast('Endorsement approved!')">Approve</button><button style="padding:5px 12px;border-radius:6px;background:#FEE2E2;color:#991B1B;border:none;font-size:11px;font-weight:600;cursor:pointer" onclick="showToast('Endorsement declined')">Decline</button></div></div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Bottom Nav -->
+<div class="bottom-nav">
+  <div class="nav-item active" id="nav-home" onclick="switchScreen('home')"><div class="nav-icon">🏠</div><div class="nav-label">Home</div></div>
+  <div class="nav-item" id="nav-daypass" onclick="switchScreen('daypass')"><div class="nav-icon">🎫</div><div class="nav-label">Day Pass</div></div>
+  <div class="nav-item" id="nav-coaches" onclick="switchScreen('coaches')"><div class="nav-icon">🏌️</div><div class="nav-label">Coaches</div></div>
+  <div class="nav-item" id="nav-shop" onclick="switchScreen('shop')"><div class="nav-icon">🛍️</div><div class="nav-label">Shop</div></div>
+  <div class="nav-item" id="nav-admin" onclick="switchScreen('admin')"><div class="nav-icon">⚙️</div><div class="nav-label">Admin</div></div>
+</div>
+
+<script>
+// Embed logos
+document.getElementById('headerLogo').src='data:image/png;base64,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';
+document.getElementById('heroLogo').src='data:image/png;base64,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';
+
+// Screen switching
+function switchScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const navEl = document.getElementById('nav-' + name);
+  if (navEl) navEl.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Toast notification
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// Animated counters
+function animateCounters() {
+  document.querySelectorAll('.hero-stat .num').forEach(el => {
+    const target = parseInt(el.dataset.target);
+    const duration = 1500;
+    const start = performance.now();
+    function update(now) {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.floor(eased * target).toLocaleString();
+      if (progress < 1) requestAnimationFrame(update);
+      else el.textContent = target.toLocaleString() + '+';
+    }
+    requestAnimationFrame(update);
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>PALO FORE GolfLink - Demo</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#1A3A8F;--primary-light:#E8F0FF;--primary-dark:#0E2563;--accent:#E84D2E;--gold:#D4A853;--dark:#1A1A2E;--gray:#6B7280;--light:#F9FAFB;--white:#FFFFFF;--radius:12px;--shadow:0 1px 3px rgba(0,0,0,.08),0 4px 12px rgba(0,0,0,.04)}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:var(--dark);background:var(--light);overflow-x:hidden;padding-bottom:80px}
+a{text-decoration:none;color:inherit}
+
+/* Header */
+.header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,0,0,.06);padding:0 16px;height:56px;display:flex;align-items:center;justify-content:space-between}
+.header-logo{display:flex;align-items:center;gap:10px}
+.header-logo img{width:36px;height:36px}
+.header-logo span{font-weight:700;font-size:18px;color:var(--primary)}
+.header-right{display:flex;align-items:center;gap:12px}
+.header-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--primary-light);color:var(--primary);font-size:16px;position:relative}
+.badge-dot{position:absolute;top:2px;right:2px;width:8px;height:8px;background:#EF4444;border-radius:50%;border:2px solid white}
+
+/* Navigation tabs */
+.nav-tabs{display:flex;overflow-x:auto;gap:6px;padding:12px 16px;scrollbar-width:none;-ms-overflow-style:none}
+.nav-tabs::-webkit-scrollbar{display:none}
+.nav-tab{flex-shrink:0;padding:8px 16px;border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;transition:.2s;border:1px solid #E5E7EB;background:white;color:var(--gray)}
+.nav-tab.active{background:var(--primary);color:white;border-color:var(--primary)}
+.nav-tab:hover{border-color:var(--primary)}
+
+/* Screen container */
+.screen{display:none}
+.screen.active{display:block}
+
+/* Hero */
+.hero{background:linear-gradient(135deg,#0E2563 0%,#1A3A8F 50%,#E84D2E 100%);color:white;padding:40px 20px 48px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-50%;right:-50%;width:100%;height:100%;background:radial-gradient(circle,rgba(255,255,255,.05) 0%,transparent 70%);pointer-events:none}
+.hero-logo{width:80px;height:80px;margin:0 auto 16px;animation:float 3s ease-in-out infinite}
+.hero h1{font-size:28px;font-weight:800;margin-bottom:6px;letter-spacing:-.5px}
+.hero .tagline{font-size:14px;opacity:.85;margin-bottom:24px}
+.hero-stats{display:flex;justify-content:center;gap:32px;margin-top:20px}
+.hero-stat{text-align:center}
+.hero-stat .num{font-size:24px;font-weight:800;color:var(--gold)}
+.hero-stat .label{font-size:11px;opacity:.7;margin-top:2px}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+
+/* Section */
+.section{padding:24px 16px}
+.section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.section-title{font-size:18px;font-weight:700;color:var(--dark)}
+.see-all{font-size:13px;color:var(--primary);font-weight:600}
+
+/* Quick Actions */
+.quick-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:0 16px 8px}
+.quick-action{display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 8px;background:white;border-radius:var(--radius);box-shadow:var(--shadow);cursor:pointer;transition:.2s}
+.quick-action:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.qa-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px}
+.qa-label{font-size:11px;font-weight:600;color:var(--dark);text-align:center}
+
+/* Horizontal scroll cards */
+.h-scroll{display:flex;overflow-x:auto;gap:14px;padding:0 16px 8px;scroll-snap-type:x mandatory;scrollbar-width:none}
+.h-scroll::-webkit-scrollbar{display:none}
+
+/* Club Card */
+.club-card{flex-shrink:0;width:280px;border-radius:var(--radius);overflow:hidden;background:white;box-shadow:var(--shadow);scroll-snap-align:start;transition:.2s}
+.club-card:hover{transform:translateY(-2px)}
+.club-img{height:140px;position:relative;overflow:hidden}
+.club-img-bg{width:100%;height:100%;object-fit:cover}
+.club-tier{position:absolute;top:10px;left:10px;padding:4px 10px;border-radius:12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.tier-exclusive{background:linear-gradient(135deg,var(--gold),#B8860B);color:white}
+.tier-premium{background:linear-gradient(135deg,#6366F1,#4F46E5);color:white}
+.tier-standard{background:var(--primary);color:white}
+.club-info{padding:14px}
+.club-name{font-size:14px;font-weight:700;margin-bottom:4px}
+.club-location{font-size:12px;color:var(--gray);display:flex;align-items:center;gap:4px;margin-bottom:8px}
+.club-meta{display:flex;justify-content:space-between;align-items:center}
+.club-rating{display:flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:var(--gold)}
+.club-price{font-size:13px;font-weight:700;color:var(--primary)}
+
+/* Coach Card */
+.coach-card{flex-shrink:0;width:200px;border-radius:var(--radius);overflow:hidden;background:white;box-shadow:var(--shadow);scroll-snap-align:start;text-align:center;padding:20px 14px;transition:.2s}
+.coach-card:hover{transform:translateY(-2px)}
+.coach-avatar{width:72px;height:72px;border-radius:50%;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;color:white;background:linear-gradient(135deg,var(--primary),var(--accent))}
+.coach-name{font-size:14px;font-weight:700;margin-bottom:2px}
+.coach-spec{font-size:11px;color:var(--gray);margin-bottom:8px}
+.coach-rating{font-size:12px;color:var(--gold);margin-bottom:4px}
+.coach-price{font-size:13px;font-weight:700;color:var(--primary)}
+
+/* Product Card */
+.product-card{flex-shrink:0;width:160px;border-radius:var(--radius);overflow:hidden;background:white;box-shadow:var(--shadow);scroll-snap-align:start;transition:.2s}
+.product-card:hover{transform:translateY(-2px)}
+.product-img{height:140px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:40px}
+.product-info{padding:12px}
+.product-cat{font-size:10px;color:var(--primary);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.product-name{font-size:13px;font-weight:600;margin-bottom:6px;line-height:1.3}
+.product-price{font-size:14px;font-weight:700;color:var(--primary)}
+
+/* Day Pass page */
+.daypass-card{background:white;border-radius:var(--radius);box-shadow:var(--shadow);margin:0 16px 14px;overflow:hidden}
+.daypass-header{display:flex;gap:14px;padding:16px}
+.daypass-thumb{width:90px;height:90px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:32px}
+.daypass-details{flex:1;min-width:0}
+.daypass-club{font-size:15px;font-weight:700;margin-bottom:2px}
+.daypass-loc{font-size:12px;color:var(--gray);margin-bottom:6px}
+.daypass-tags{display:flex;flex-wrap:wrap;gap:4px}
+.daypass-tag{padding:3px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--primary-light);color:var(--primary)}
+.daypass-footer{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-top:1px solid #F3F4F6;background:#FAFAFA}
+.daypass-price{font-size:16px;font-weight:700;color:var(--primary)}
+.daypass-btn{padding:8px 18px;border-radius:8px;background:var(--primary);color:white;font-size:13px;font-weight:600;border:none;cursor:pointer}
+
+/* Admin Dashboard */
+.admin-metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:0 16px 16px}
+.metric-card{background:white;border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
+.metric-label{font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.metric-value{font-size:22px;font-weight:800;color:var(--dark)}
+.metric-change{font-size:11px;margin-top:4px;font-weight:600}
+.metric-up{color:#10B981}
+.metric-down{color:#EF4444}
+
+.admin-table{margin:0 16px 16px;background:white;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.admin-table-header{padding:14px 16px;font-size:15px;font-weight:700;border-bottom:1px solid #F3F4F6}
+.admin-row{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid #F9FAFB}
+.admin-row:last-child{border-bottom:none}
+.admin-row-left{flex:1}
+.admin-row-name{font-size:13px;font-weight:600}
+.admin-row-sub{font-size:11px;color:var(--gray)}
+.status-badge{padding:3px 10px;border-radius:10px;font-size:10px;font-weight:700;text-transform:uppercase}
+.status-reserved{background:#FEF3C7;color:#92400E}
+.status-checked{background:#D1FAE5;color:#065F46}
+.status-pending{background:#FEE2E2;color:#991B1B}
+.status-completed{background:#E0E7FF;color:#3730A3}
+
+/* How it works */
+.how-it-works{padding:24px 16px;background:white}
+.hiw-step{display:flex;gap:14px;margin-bottom:20px;align-items:flex-start}
+.hiw-num{width:36px;height:36px;border-radius:50%;background:var(--primary);color:white;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;flex-shrink:0}
+.hiw-text h3{font-size:14px;font-weight:700;margin-bottom:2px}
+.hiw-text p{font-size:12px;color:var(--gray);line-height:1.5}
+
+/* CTA Banner */
+.cta-banner{margin:16px;padding:24px;border-radius:var(--radius);background:linear-gradient(135deg,var(--primary),var(--accent));color:white;text-align:center}
+.cta-banner h3{font-size:18px;font-weight:700;margin-bottom:6px}
+.cta-banner p{font-size:13px;opacity:.85;margin-bottom:16px}
+.cta-btn{display:inline-block;padding:10px 28px;border-radius:8px;background:white;color:var(--primary);font-weight:700;font-size:14px;border:none;cursor:pointer}
+
+/* Bottom Nav */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:72px;background:rgba(255,255,255,.96);backdrop-filter:blur(16px);border-top:1px solid rgba(0,0,0,.06);display:flex;align-items:center;justify-content:space-around;z-index:200;padding-bottom:env(safe-area-inset-bottom)}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:8px 12px;transition:.2s}
+.nav-item.active .nav-icon{color:var(--primary)}
+.nav-item.active .nav-label{color:var(--primary)}
+.nav-icon{font-size:20px;color:var(--gray);transition:.2s}
+.nav-label{font-size:10px;font-weight:600;color:var(--gray);transition:.2s}
+
+/* Search bar */
+.search-bar{margin:12px 16px;padding:10px 16px;border-radius:12px;border:1px solid #E5E7EB;background:white;font-size:14px;color:var(--gray);display:flex;align-items:center;gap:8px}
+
+/* Filter chips */
+.filter-chips{display:flex;gap:8px;padding:0 16px 12px;overflow-x:auto;scrollbar-width:none}
+.filter-chips::-webkit-scrollbar{display:none}
+.filter-chip{flex-shrink:0;padding:6px 14px;border-radius:16px;font-size:12px;font-weight:500;border:1px solid #E5E7EB;background:white;cursor:pointer;transition:.2s}
+.filter-chip.active{background:var(--primary);color:white;border-color:var(--primary)}
+
+/* Toast */
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--dark);color:white;padding:12px 24px;border-radius:12px;font-size:13px;font-weight:500;z-index:300;opacity:0;transition:.3s;box-shadow:0 4px 20px rgba(0,0,0,.2)}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+/* Animations */
+@keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.animate-in{animation:fadeInUp .4s ease-out}
+
+/* Desktop */
+@media(min-width:768px){
+  body{max-width:430px;margin:0 auto;box-shadow:-1px 0 0 #E5E7EB,1px 0 0 #E5E7EB;min-height:100vh}
+  .bottom-nav{max-width:430px;left:50%;transform:translateX(-50%)}
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-logo" onclick="switchScreen('home')" style="cursor:pointer">
+    <img id="headerLogo" alt="PALO FORE GolfLink">
+    <span>PALO FORE</span>
+  </div>
+  <div class="header-right">
+    <div class="header-icon" onclick="showToast('Notifications coming soon')">
+      🔔<div class="badge-dot"></div>
+    </div>
+    <div class="header-icon" onclick="showToast('Cart: 2 items')">🛒</div>
+    <div class="header-icon" onclick="switchScreen('admin')">👤</div>
+  </div>
+</div>
+
+<!-- ============ HOME SCREEN ============ -->
+<div class="screen active" id="screen-home">
+  <div class="hero">
+    <img id="heroLogo" class="hero-logo" alt="PALO FORE GolfLink">
+    <h1>PALO FORE GolfLink</h1>
+    <div class="tagline">GolfLink Marketplace — Philippines</div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="num" data-target="117">0</div><div class="label">Golf Courses</div></div>
+      <div class="hero-stat"><div class="num" data-target="85">0</div><div class="label">Pro Coaches</div></div>
+      <div class="hero-stat"><div class="num" data-target="1250">0</div><div class="label">Active Golfers</div></div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="section"><div class="section-header"><div class="section-title">Quick Actions</div></div></div>
+  <div class="quick-actions">
+    <div class="quick-action" onclick="switchScreen('daypass')"><div class="qa-icon" style="background:#ECFDF5">🎫</div><div class="qa-label">Day Pass</div></div>
+    <div class="quick-action" onclick="switchScreen('coaches')"><div class="qa-icon" style="background:#EFF6FF">🏌️</div><div class="qa-label">Find Coach</div></div>
+    <div class="quick-action" onclick="switchScreen('shop')"><div class="qa-icon" style="background:#FEF3C7">🛍️</div><div class="qa-label">Pro Shop</div></div>
+    <div class="quick-action" onclick="switchScreen('home')"><div class="qa-icon" style="background:#F3E8FF">⛳</div><div class="qa-label">Driving Range</div></div>
+    <div class="quick-action" onclick="switchScreen('home')"><div class="qa-icon" style="background:#FEE2E2">🏆</div><div class="qa-label">Events</div></div>
+    <div class="quick-action" onclick="switchScreen('home')"><div class="qa-icon" style="background:#E0E7FF">💬</div><div class="qa-label">Community</div></div>
+  </div>
+
+  <!-- Featured Clubs -->
+  <div class="section"><div class="section-header"><div class="section-title">Featured Clubs</div><span class="see-all" onclick="switchScreen('daypass')">See All →</span></div></div>
+  <div class="h-scroll">
+    <div class="club-card" onclick="showToast('Opening Manila Southwoods...')">
+      <div class="club-img" style="background:linear-gradient(135deg,#1a5c3f,#0a3d2a)">
+        <div style="color:white;font-size:48px;display:flex;align-items:center;justify-content:center;height:100%">⛳</div>
+        <div class="club-tier tier-exclusive">Exclusive</div>
+      </div>
+      <div class="club-info">
+        <div class="club-name">Manila Southwoods G&CC</div>
+        <div class="club-location">📍 Carmona, Cavite</div>
+        <div class="club-meta"><div class="club-rating">⭐ 4.9 (312)</div><div class="club-price">₱4,500</div></div>
+      </div>
+    </div>
+    <div class="club-card" onclick="showToast('Opening Riviera Golf...')">
+      <div class="club-img" style="background:linear-gradient(135deg,#2563eb,#1e40af)">
+        <div style="color:white;font-size:48px;display:flex;align-items:center;justify-content:center;height:100%">🏌️</div>
+        <div class="club-tier tier-premium">Premium</div>
+      </div>
+      <div class="club-info">
+        <div class="club-name">Riviera Golf & Country Club</div>
+        <div class="club-location">📍 Silang, Cavite</div>
+        <div class="club-meta"><div class="club-rating">⭐ 4.8 (287)</div><div class="club-price">₱3,800</div></div>
+      </div>
+    </div>
+    <div class="club-card" onclick="showToast('Opening Pradera Verde...')">
+      <div class="club-img" style="background:linear-gradient(135deg,#7c3aed,#5b21b6)">
+        <div style="color:white;font-size:48px;display:flex;align-items:center;justify-content:center;height:100%">🌿</div>
+        <div class="club-tier tier-premium">Premium</div>
+      </div>
+      <div class="club-info">
+        <div class="club-name">Pradera Verde Golf Club</div>
+        <div class="club-location">📍 Lubao, Pampanga</div>
+        <div class="club-meta"><div class="club-rating">⭐ 4.7 (198)</div><div class="club-price">₱2,800</div></div>
+      </div>
+    </div>
+    <div class="club-card">
+      <div class="club-img" style="background:linear-gradient(135deg,#059669,#047857)">
+        <div style="color:white;font-size:48px;display:flex;align-items:center;justify-content:center;height:100%">🌴</div>
+        <div class="club-tier tier-standard">Standard</div>
+      </div>
+      <div class="club-info">
+        <div class="club-name">Cebu Country Club</div>
+        <div class="club-location">📍 Cebu City, Cebu</div>
+        <div class="club-meta"><div class="club-rating">⭐ 4.6 (156)</div><div class="club-price">₱2,200</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top Coaches -->
+  <div class="section"><div class="section-header"><div class="section-title">Top Coaches</div><span class="see-all" onclick="switchScreen('coaches')">See All →</span></div></div>
+  <div class="h-scroll">
+    <div class="coach-card"><div class="coach-avatar">JR</div><div class="coach-name">Coach Jun Reyes</div><div class="coach-spec">Short Game Specialist</div><div class="coach-rating">⭐ 4.9 · 142 lessons</div><div class="coach-price">₱2,000/hr</div></div>
+    <div class="coach-card"><div class="coach-avatar">MC</div><div class="coach-name">Coach Maria Cruz</div><div class="coach-spec">Swing Analysis</div><div class="coach-rating">⭐ 4.8 · 98 lessons</div><div class="coach-price">₱1,800/hr</div></div>
+    <div class="coach-card"><div class="coach-avatar">AT</div><div class="coach-name">Coach Andre Tan</div><div class="coach-spec">Putting & Chipping</div><div class="coach-rating">⭐ 4.7 · 76 lessons</div><div class="coach-price">₱1,500/hr</div></div>
+    <div class="coach-card"><div class="coach-avatar" style="background:linear-gradient(135deg,var(--gold),#B8860B)">LS</div><div class="coach-name">Coach Lisa Santos</div><div class="coach-spec">Women's Golf</div><div class="coach-rating">⭐ 4.9 · 210 lessons</div><div class="coach-price">₱2,500/hr</div></div>
+  </div>
+
+  <!-- How It Works -->
+  <div class="how-it-works">
+    <div class="section-header"><div class="section-title">How It Works</div></div>
+    <div class="hiw-step"><div class="hiw-num">1</div><div class="hiw-text"><h3>Browse & Discover</h3><p>Find golf clubs, coaches, day passes, and equipment across the Philippines</p></div></div>
+    <div class="hiw-step"><div class="hiw-num">2</div><div class="hiw-text"><h3>Book & Pay</h3><p>Secure your spot instantly with GCash, Maya, or credit card via PayMongo</p></div></div>
+    <div class="hiw-step"><div class="hiw-num">3</div><div class="hiw-text"><h3>Play & Improve</h3><p>Show up, play, get coached, and track your golf journey</p></div></div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-banner">
+    <h3>Join PALO FORE GolfLink</h3>
+    <p>Connect with 85+ coaches and 117 courses across the Philippines</p>
+    <button class="cta-btn" onclick="showToast('Sign up flow would open')">Get Started Free</button>
+  </div>
+</div>
+
+<!-- ============ DAY PASS SCREEN ============ -->
+<div class="screen" id="screen-daypass">
+  <div class="search-bar" onclick="showToast('Search clubs...')">🔍 Search clubs, locations...</div>
+  <div class="filter-chips">
+    <div class="filter-chip active">All</div>
+    <div class="filter-chip">NCR</div>
+    <div class="filter-chip">Cavite</div>
+    <div class="filter-chip">Laguna</div>
+    <div class="filter-chip">Pampanga</div>
+    <div class="filter-chip">Cebu</div>
+    <div class="filter-chip">Davao</div>
+  </div>
+  <div class="section"><div class="section-header"><div class="section-title">Available Day Passes</div></div></div>
+
+  <div class="daypass-card animate-in">
+    <div class="daypass-header">
+      <div class="daypass-thumb" style="background:linear-gradient(135deg,#0D5C3F,#094A32);color:white">⛳</div>
+      <div class="daypass-details">
+        <div class="daypass-club">Manila Southwoods G&CC</div>
+        <div class="daypass-loc">📍 Carmona, Cavite · 45 min from Makati</div>
+        <div class="daypass-tags"><span class="daypass-tag">Exclusive</span><span class="daypass-tag">18 Holes</span><span class="daypass-tag">Cart Included</span></div>
+      </div>
+    </div>
+    <div class="daypass-footer"><div class="daypass-price">₱4,500 <span style="font-size:11px;color:var(--gray);font-weight:400">/ person</span></div><button class="daypass-btn" onclick="showToast('Booking flow: Select date → Time slot → Payment')">Book Now</button></div>
+  </div>
+
+  <div class="daypass-card animate-in">
+    <div class="daypass-header">
+      <div class="daypass-thumb" style="background:linear-gradient(135deg,#2563eb,#1e40af);color:white">🏌️</div>
+      <div class="daypass-details">
+        <div class="daypass-club">Riviera Golf & Country Club</div>
+        <div class="daypass-loc">📍 Silang, Cavite · 1 hr from Makati</div>
+        <div class="daypass-tags"><span class="daypass-tag">Premium</span><span class="daypass-tag">27 Holes</span><span class="daypass-tag">Caddy Included</span></div>
+      </div>
+    </div>
+    <div class="daypass-footer"><div class="daypass-price">₱3,800 <span style="font-size:11px;color:var(--gray);font-weight:400">/ person</span></div><button class="daypass-btn" onclick="showToast('Booking flow: Select date → Time slot → Payment')">Book Now</button></div>
+  </div>
+
+  <div class="daypass-card animate-in">
+    <div class="daypass-header">
+      <div class="daypass-thumb" style="background:linear-gradient(135deg,#7c3aed,#5b21b6);color:white">🌿</div>
+      <div class="daypass-details">
+        <div class="daypass-club">Pradera Verde Golf Club</div>
+        <div class="daypass-loc">📍 Lubao, Pampanga · Clark area</div>
+        <div class="daypass-tags"><span class="daypass-tag">Premium</span><span class="daypass-tag">18 Holes</span><span class="daypass-tag">DOT GolfEx</span></div>
+      </div>
+    </div>
+    <div class="daypass-footer"><div class="daypass-price">₱2,800 <span style="font-size:11px;color:var(--gray);font-weight:400">/ person</span></div><button class="daypass-btn" onclick="showToast('Booking flow: Select date → Time slot → Payment')">Book Now</button></div>
+  </div>
+
+  <div class="daypass-card animate-in">
+    <div class="daypass-header">
+      <div class="daypass-thumb" style="background:linear-gradient(135deg,#059669,#047857);color:white">🌴</div>
+      <div class="daypass-details">
+        <div class="daypass-club">Cebu Country Club</div>
+        <div class="daypass-loc">📍 Cebu City, Cebu</div>
+        <div class="daypass-tags"><span class="daypass-tag">Standard</span><span class="daypass-tag">18 Holes</span></div>
+      </div>
+    </div>
+    <div class="daypass-footer"><div class="daypass-price">₱2,200 <span style="font-size:11px;color:var(--gray);font-weight:400">/ person</span></div><button class="daypass-btn" onclick="showToast('Booking flow: Select date → Time slot → Payment')">Book Now</button></div>
+  </div>
+</div>
+
+<!-- ============ COACHES SCREEN ============ -->
+<div class="screen" id="screen-coaches">
+  <div class="search-bar">🔍 Search coaches, specializations...</div>
+  <div class="filter-chips">
+    <div class="filter-chip active">All</div>
+    <div class="filter-chip">Short Game</div>
+    <div class="filter-chip">Swing</div>
+    <div class="filter-chip">Putting</div>
+    <div class="filter-chip">Women's</div>
+    <div class="filter-chip">Junior</div>
+  </div>
+  <div class="section"><div class="section-title" style="padding:0 0 4px">85 Coaches Available</div></div>
+
+  <div style="padding:0 16px;display:flex;flex-direction:column;gap:12px">
+    <div style="background:white;border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;display:flex;gap:14px;align-items:center">
+      <div class="coach-avatar" style="width:56px;height:56px;font-size:18px;flex-shrink:0">JR</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:700;font-size:14px">Coach Jun Reyes</div>
+        <div style="font-size:12px;color:var(--gray)">Short Game Specialist · Manila</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px"><span style="font-size:12px;color:var(--gold)">⭐ 4.9 · 142 lessons</span><span style="font-size:14px;font-weight:700;color:var(--primary)">₱2,000/hr</span></div>
+      </div>
+    </div>
+    <div style="background:white;border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;display:flex;gap:14px;align-items:center">
+      <div class="coach-avatar" style="width:56px;height:56px;font-size:18px;flex-shrink:0">MC</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:700;font-size:14px">Coach Maria Cruz</div>
+        <div style="font-size:12px;color:var(--gray)">Swing Analysis · Cavite</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px"><span style="font-size:12px;color:var(--gold)">⭐ 4.8 · 98 lessons</span><span style="font-size:14px;font-weight:700;color:var(--primary)">₱1,800/hr</span></div>
+      </div>
+    </div>
+    <div style="background:white;border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;display:flex;gap:14px;align-items:center">
+      <div class="coach-avatar" style="width:56px;height:56px;font-size:18px;flex-shrink:0;background:linear-gradient(135deg,var(--gold),#B8860B)">LS</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:700;font-size:14px">Coach Lisa Santos</div>
+        <div style="font-size:12px;color:var(--gray)">Women's Golf · Makati</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px"><span style="font-size:12px;color:var(--gold)">⭐ 4.9 · 210 lessons</span><span style="font-size:14px;font-weight:700;color:var(--primary)">₱2,500/hr</span></div>
+      </div>
+    </div>
+    <div style="background:white;border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;display:flex;gap:14px;align-items:center">
+      <div class="coach-avatar" style="width:56px;height:56px;font-size:18px;flex-shrink:0">AT</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:700;font-size:14px">Coach Andre Tan</div>
+        <div style="font-size:12px;color:var(--gray)">Putting & Chipping · Clark</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px"><span style="font-size:12px;color:var(--gold)">⭐ 4.7 · 76 lessons</span><span style="font-size:14px;font-weight:700;color:var(--primary)">₱1,500/hr</span></div>
+      </div>
+    </div>
+    <div style="background:white;border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;display:flex;gap:14px;align-items:center">
+      <div class="coach-avatar" style="width:56px;height:56px;font-size:18px;flex-shrink:0;background:linear-gradient(135deg,#6366f1,#4f46e5)">RD</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:700;font-size:14px">Coach Rico Delgado</div>
+        <div style="font-size:12px;color:var(--gray)">Junior Golf · Laguna</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px"><span style="font-size:12px;color:var(--gold)">⭐ 4.8 · 134 lessons</span><span style="font-size:14px;font-weight:700;color:var(--primary)">₱1,200/hr</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SHOP SCREEN ============ -->
+<div class="screen" id="screen-shop">
+  <div class="search-bar">🔍 Search equipment, apparel...</div>
+  <div class="filter-chips">
+    <div class="filter-chip active">All</div>
+    <div class="filter-chip">Clubs</div>
+    <div class="filter-chip">Balls</div>
+    <div class="filter-chip">Apparel</div>
+    <div class="filter-chip">Accessories</div>
+    <div class="filter-chip">Bags</div>
+  </div>
+  <div class="section"><div class="section-title" style="padding:0 0 4px">Pro Shop</div></div>
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:0 16px">
+    <div class="product-card" onclick="showToast('Added to cart!')"><div class="product-img" style="background:#F0FDF4">🏌️</div><div class="product-info"><div class="product-cat">Clubs</div><div class="product-name">TaylorMade Stealth 2 Driver</div><div class="product-price">₱32,500</div></div></div>
+    <div class="product-card" onclick="showToast('Added to cart!')"><div class="product-img" style="background:#EFF6FF">⛳</div><div class="product-info"><div class="product-cat">Balls</div><div class="product-name">Titleist Pro V1 (Dozen)</div><div class="product-price">₱3,800</div></div></div>
+    <div class="product-card" onclick="showToast('Added to cart!')"><div class="product-img" style="background:#FEF3C7">👕</div><div class="product-info"><div class="product-cat">Apparel</div><div class="product-name">Under Armour Polo Shirt</div><div class="product-price">₱3,200</div></div></div>
+    <div class="product-card" onclick="showToast('Added to cart!')"><div class="product-img" style="background:#F3E8FF">🧤</div><div class="product-info"><div class="product-cat">Accessories</div><div class="product-name">FootJoy WeatherSof Glove</div><div class="product-price">₱1,100</div></div></div>
+    <div class="product-card" onclick="showToast('Added to cart!')"><div class="product-img" style="background:#FEE2E2">🎒</div><div class="product-info"><div class="product-cat">Bags</div><div class="product-name">Callaway Fairway C Stand Bag</div><div class="product-price">₱12,500</div></div></div>
+    <div class="product-card" onclick="showToast('Added to cart!')"><div class="product-img" style="background:#E0E7FF">🕶️</div><div class="product-info"><div class="product-cat">Accessories</div><div class="product-name">Oakley Radar EV Path</div><div class="product-price">₱9,800</div></div></div>
+  </div>
+</div>
+
+<!-- ============ ADMIN SCREEN ============ -->
+<div class="screen" id="screen-admin">
+  <div class="section" style="padding-bottom:8px"><div class="section-title">Club Admin Dashboard</div><div style="font-size:12px;color:var(--gray);margin-top:4px">Manila Southwoods G&CC · March 2026</div></div>
+
+  <div class="admin-metrics">
+    <div class="metric-card"><div class="metric-label">Revenue (MTD)</div><div class="metric-value">₱485K</div><div class="metric-change metric-up">↑ 12.3% vs last month</div></div>
+    <div class="metric-card"><div class="metric-label">Day Passes</div><div class="metric-value">47</div><div class="metric-change metric-up">↑ 8 more than Feb</div></div>
+    <div class="metric-card"><div class="metric-label">Pending Endorsements</div><div class="metric-value" style="color:#EF4444">5</div><div class="metric-change" style="color:var(--gray)">Needs review</div></div>
+    <div class="metric-card"><div class="metric-label">Avg Rating</div><div class="metric-value" style="color:var(--gold)">4.9</div><div class="metric-change metric-up">↑ 0.1 this month</div></div>
+  </div>
+
+  <div class="nav-tabs" style="padding-top:0">
+    <div class="nav-tab active" onclick="this.parentNode.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));this.classList.add('active')">Day Passes</div>
+    <div class="nav-tab" onclick="this.parentNode.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));this.classList.add('active')">Endorsements</div>
+    <div class="nav-tab" onclick="this.parentNode.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));this.classList.add('active')">Transfers</div>
+    <div class="nav-tab" onclick="this.parentNode.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));this.classList.add('active')">Revenue</div>
+  </div>
+
+  <div class="admin-table">
+    <div class="admin-table-header">Recent Day Passes</div>
+    <div class="admin-row"><div class="admin-row-left"><div class="admin-row-name">Juan Santos</div><div class="admin-row-sub">Mar 8 · Morning · 2 players</div></div><div class="status-badge status-reserved">Reserved</div></div>
+    <div class="admin-row"><div class="admin-row-left"><div class="admin-row-name">Maria Cruz</div><div class="admin-row-sub">Mar 8 · Afternoon · 1 player</div></div><div class="status-badge status-checked">Checked In</div></div>
+    <div class="admin-row"><div class="admin-row-left"><div class="admin-row-name">Carlos Lim</div><div class="admin-row-sub">Mar 9 · Morning · 4 players</div></div><div class="status-badge status-reserved">Reserved</div></div>
+    <div class="admin-row"><div class="admin-row-left"><div class="admin-row-name">Anna Reyes</div><div class="admin-row-sub">Mar 7 · Twilight · 1 player</div></div><div class="status-badge status-completed">Completed</div></div>
+  </div>
+
+  <div class="admin-table">
+    <div class="admin-table-header">Pending Endorsements</div>
+    <div class="admin-row"><div class="admin-row-left"><div class="admin-row-name">Pedro Reyes → Juan Santos</div><div class="admin-row-sub">Business associate · Expires Mar 10</div></div><div style="display:flex;gap:6px"><button style="padding:5px 12px;border-radius:6px;background:var(--primary);color:white;border:none;font-size:11px;font-weight:600;cursor:pointer" onclick="showToast('Endorsement approved!')">Approve</button><button style="padding:5px 12px;border-radius:6px;background:#FEE2E2;color:#991B1B;border:none;font-size:11px;font-weight:600;cursor:pointer" onclick="showToast('Endorsement declined')">Decline</button></div></div>
+    <div class="admin-row"><div class="admin-row-left"><div class="admin-row-name">Ana Torres → Carlos Lim</div><div class="admin-row-sub">Friend · Expires Mar 10</div></div><div style="display:flex;gap:6px"><button style="padding:5px 12px;border-radius:6px;background:var(--primary);color:white;border:none;font-size:11px;font-weight:600;cursor:pointer" onclick="showToast('Endorsement approved!')">Approve</button><button style="padding:5px 12px;border-radius:6px;background:#FEE2E2;color:#991B1B;border:none;font-size:11px;font-weight:600;cursor:pointer" onclick="showToast('Endorsement declined')">Decline</button></div></div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Bottom Nav -->
+<div class="bottom-nav">
+  <div class="nav-item active" id="nav-home" onclick="switchScreen('home')"><div class="nav-icon">🏠</div><div class="nav-label">Home</div></div>
+  <div class="nav-item" id="nav-daypass" onclick="switchScreen('daypass')"><div class="nav-icon">🎫</div><div class="nav-label">Day Pass</div></div>
+  <div class="nav-item" id="nav-coaches" onclick="switchScreen('coaches')"><div class="nav-icon">🏌️</div><div class="nav-label">Coaches</div></div>
+  <div class="nav-item" id="nav-shop" onclick="switchScreen('shop')"><div class="nav-icon">🛍️</div><div class="nav-label">Shop</div></div>
+  <div class="nav-item" id="nav-admin" onclick="switchScreen('admin')"><div class="nav-icon">⚙️</div><div class="nav-label">Admin</div></div>
+</div>
+
+<script>
+// Embed logos
+document.getElementById('headerLogo').src='data:image/png;base64,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';
+document.getElementById('heroLogo').src='data:image/png;base64,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';
+
+// Screen switching
+function switchScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const navEl = document.getElementById('nav-' + name);
+  if (navEl) navEl.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Toast notification
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// Animated counters
+function animateCounters() {
+  document.querySelectorAll('.hero-stat .num').forEach(el => {
+    const target = parseInt(el.dataset.target);
+    const duration = 1500;
+    const start = performance.now();
+    function update(now) {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.floor(eased * target).toLocaleString();
+      if (progress < 1) requestAnimationFrame(update);
+      else el.textContent = target.toLocaleString() + '+';
+    }
+    requestAnimationFrame(update);
+  });
+}
+
+// Filter chip toggle
+document.querySelectorAll('.filter-chips').forEach(container => {
+  container.querySelectorAll('.filter-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      container.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+    });
+  });
+});
+
+// Init
+animateCounters();
+</script>
+</body>
+</html>
+      
+        
+      
+      Claude is active in this tab group
+      
+      
+        
+          
+        
+        Open chat
+      
+      
+        
+          
+        
+        Dismiss
+      
+    

@@ -3,12 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Inter:wght@300;400;500;600;700;800&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
 <title>PALO FORE GolfLink - Demo</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--primary:#1A3A8F;--primary-light:#E8F0FF;--primary-dark:#0E2563;--accent:#E84D2E;--gold:#D4A853;--dark:#1A1A2E;--gray:#6B7280;--light:#F9FAFB;--white:#FFFFFF;--radius:12px;--shadow:0 1px 3px rgba(0,0,0,.08),0 4px 12px rgba(0,0,0,.04)}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:var(--dark);background:var(--light);overflow-x:hidden;padding-bottom:80px}
-.site-footer{background:var(--primary-dark);color:rgba(255,255,255,.7);text-align:center;padding:28px 20px 96px;font-size:10px;line-height:1.6;letter-spacing:.2px;margin-top:24px}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:var(--dark);background:var(--light);overflow-x:hidden;padding-bottom:80px;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+h1,h2,h3,.hero h1,.section-title,.club-name,.coach-name,.daypass-club,.admin-table-header,.cta-banner h3,.metric-value{font-family:'Playfair Display','Georgia',serif}
+.header-logo span{font-family:'Cormorant Garamond','Playfair Display','Georgia',serif;letter-spacing:1.5px;text-transform:uppercase}
+.site-footer{background:var(--primary-dark);color:rgba(255,255,255,.7);text-align:center;padding:28px 20px 96px;font-size:10px;line-height:1.7;letter-spacing:.4px;margin-top:24px;font-family:'Inter',-apple-system,sans-serif}
 .site-footer strong{color:rgba(255,255,255,.9);font-weight:600}
 a{text-decoration:none;color:inherit}
 
@@ -36,19 +41,19 @@ a{text-decoration:none;color:inherit}
 .hero{background:linear-gradient(135deg,#0E2563 0%,#1A3A8F 50%,#E84D2E 100%);color:white;padding:40px 20px 48px;text-align:center;position:relative;overflow:hidden}
 .hero::before{content:'';position:absolute;top:-50%;right:-50%;width:100%;height:100%;background:radial-gradient(circle,rgba(255,255,255,.05) 0%,transparent 70%);pointer-events:none}
 .hero-logo{width:100px;height:100px;margin:0 auto 16px;animation:float 3s ease-in-out infinite;border-radius:50%;background:rgba(255,255,255,.95);padding:10px;box-shadow:0 4px 24px rgba(0,0,0,.2),0 0 0 4px rgba(255,255,255,.3)}
-.hero h1{font-size:28px;font-weight:800;margin-bottom:6px;letter-spacing:-.5px}
-.hero .tagline{font-size:14px;opacity:.85;margin-bottom:24px}
+.hero h1{font-size:30px;font-weight:700;margin-bottom:8px;letter-spacing:-.3px;line-height:1.15}
+.hero .tagline{font-size:14px;opacity:.85;margin-bottom:24px;font-weight:300;letter-spacing:.8px}
 .hero-stats{display:flex;justify-content:center;gap:32px;margin-top:20px}
 .hero-stat{text-align:center}
-.hero-stat .num{font-size:24px;font-weight:800;color:var(--gold)}
-.hero-stat .label{font-size:11px;opacity:.7;margin-top:2px}
+.hero-stat .num{font-size:24px;font-weight:700;color:var(--gold);font-family:'Playfair Display','Georgia',serif}
+.hero-stat .label{font-size:11px;opacity:.7;margin-top:2px;letter-spacing:.8px;text-transform:uppercase;font-weight:300}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
 
 /* Section */
 .section{padding:24px 16px}
 .section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-.section-title{font-size:18px;font-weight:700;color:var(--dark)}
-.see-all{font-size:13px;color:var(--primary);font-weight:600}
+.section-title{font-size:19px;font-weight:700;color:var(--dark);letter-spacing:-.2px}
+.see-all{font-size:13px;color:var(--primary);font-weight:500;letter-spacing:.3px}
 
 /* Quick Actions */
 .quick-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:0 16px 8px}
@@ -68,7 +73,7 @@ a{text-decoration:none;color:inherit}
 .club-img img{width:100%;height:100%;object-fit:cover;transition:.5s}
 .club-card:hover .club-img img{transform:scale(1.06)}
 .club-img-bg{width:100%;height:100%;object-fit:cover}
-.club-tier{position:absolute;top:10px;left:10px;padding:4px 10px;border-radius:12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.club-tier{position:absolute;top:10px;left:10px;padding:4px 10px;border-radius:12px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px}
 .tier-exclusive{background:linear-gradient(135deg,var(--gold),#B8860B);color:white}
 .tier-premium{background:linear-gradient(135deg,#6366F1,#4F46E5);color:white}
 .tier-standard{background:var(--primary);color:white}
@@ -77,7 +82,7 @@ a{text-decoration:none;color:inherit}
 .club-location{font-size:12px;color:var(--gray);display:flex;align-items:center;gap:4px;margin-bottom:8px}
 .club-meta{display:flex;justify-content:space-between;align-items:center}
 .club-rating{display:flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:var(--gold)}
-.club-price{font-size:13px;font-weight:700;color:var(--primary)}
+.club-price{font-size:13px;font-weight:700;color:var(--primary);font-family:'Playfair Display','Georgia',serif}
 
 /* Coach Card */
 .coach-card{flex-shrink:0;width:200px;border-radius:var(--radius);overflow:hidden;background:white;box-shadow:var(--shadow);scroll-snap-align:start;text-align:center;padding:20px 14px;transition:.2s}
@@ -86,7 +91,7 @@ a{text-decoration:none;color:inherit}
 .coach-name{font-size:14px;font-weight:700;margin-bottom:2px}
 .coach-spec{font-size:11px;color:var(--gray);margin-bottom:8px}
 .coach-rating{font-size:12px;color:var(--gold);margin-bottom:4px}
-.coach-price{font-size:13px;font-weight:700;color:var(--primary)}
+.coach-price{font-size:13px;font-weight:700;color:var(--primary);font-family:'Playfair Display','Georgia',serif}
 
 /* Product Card */
 .product-card{flex-shrink:0;width:160px;border-radius:var(--radius);overflow:hidden;background:white;box-shadow:0 2px 12px rgba(0,0,0,.08),0 1px 3px rgba(0,0,0,.04);scroll-snap-align:start;transition:.3s}
@@ -97,7 +102,7 @@ a{text-decoration:none;color:inherit}
 .product-info{padding:12px}
 .product-cat{font-size:10px;color:var(--primary);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
 .product-name{font-size:13px;font-weight:600;margin-bottom:6px;line-height:1.3}
-.product-price{font-size:14px;font-weight:700;color:var(--primary)}
+.product-price{font-size:14px;font-weight:700;color:var(--primary);font-family:'Playfair Display','Georgia',serif}
 
 /* Day Pass page */
 .daypass-card{background:white;border-radius:var(--radius);box-shadow:var(--shadow);margin:0 16px 14px;overflow:hidden}
@@ -109,13 +114,13 @@ a{text-decoration:none;color:inherit}
 .daypass-tags{display:flex;flex-wrap:wrap;gap:4px}
 .daypass-tag{padding:3px 8px;border-radius:10px;font-size:10px;font-weight:600;background:var(--primary-light);color:var(--primary)}
 .daypass-footer{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-top:1px solid #F3F4F6;background:#FAFAFA}
-.daypass-price{font-size:16px;font-weight:700;color:var(--primary)}
+.daypass-price{font-size:16px;font-weight:700;color:var(--primary);font-family:'Playfair Display','Georgia',serif}
 .daypass-btn{padding:8px 18px;border-radius:8px;background:var(--primary);color:white;font-size:13px;font-weight:600;border:none;cursor:pointer}
 
 /* Admin Dashboard */
 .admin-metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:0 16px 16px}
 .metric-card{background:white;border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
-.metric-label{font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.metric-label{font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px;font-weight:400}
 .metric-value{font-size:22px;font-weight:800;color:var(--dark)}
 .metric-change{font-size:11px;margin-top:4px;font-weight:600}
 .metric-up{color:#10B981}
@@ -143,9 +148,9 @@ a{text-decoration:none;color:inherit}
 
 /* CTA Banner */
 .cta-banner{margin:16px;padding:24px;border-radius:var(--radius);background:linear-gradient(135deg,var(--primary),var(--accent));color:white;text-align:center}
-.cta-banner h3{font-size:18px;font-weight:700;margin-bottom:6px}
+.cta-banner h3{font-size:20px;font-weight:700;margin-bottom:8px;letter-spacing:-.2px}
 .cta-banner p{font-size:13px;opacity:.85;margin-bottom:16px}
-.cta-btn{display:inline-block;padding:10px 28px;border-radius:8px;background:white;color:var(--primary);font-weight:700;font-size:14px;border:none;cursor:pointer}
+.cta-btn{display:inline-block;padding:10px 28px;border-radius:8px;background:white;color:var(--primary);font-weight:600;font-size:14px;border:none;cursor:pointer;letter-spacing:.5px}
 
 /* Bottom Nav */
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;height:72px;background:rgba(255,255,255,.96);backdrop-filter:blur(16px);border-top:1px solid rgba(0,0,0,.06);display:flex;align-items:center;justify-content:space-around;z-index:200;padding-bottom:env(safe-area-inset-bottom)}
